@@ -22,27 +22,27 @@
         </button>
         <div class="collapse navbar-collapse mx-auto p-2" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="/index">Главная</a>
-                <a class="nav-link" href="/about">Обо мне</a>
-                <a class="nav-link" href="/cakes">Торты</a>
-                <a class="nav-link" href="/feedback">Отзывы</a>
+                <a class="nav-link {{ 'active' if active_page == 0 else '' }}" href="/index">Главная</a>
+                <a class="nav-link {{ 'active' if active_page == 1 else '' }}" href="/about">Обо мне</a>
+                <a class="nav-link {{ 'active' if active_page == 2 else '' }}" href="/cakes/1">Торты</a>
+                <a class="nav-link {{ 'active' if active_page == 3 else '' }}" href="/feedback">Отзывы</a>
             </div>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item col-6 col-lg-auto">
                     <a class="nav-link" href="https://vk.com/katya_konditer1" target="_blank">
-                        <img src="static/img/vk_icon.svg" class="navbar-nav-svg" width="20" height="20">
+                        <img src="/static/img/vk_icon.svg" class="navbar-nav-svg" width="20" height="20">
                     </a>
                 </li>
                 <li class="nav-item col-6 col-lg-auto">
                     <a class="nav-link" href="https://t.me/UltraDiscountGS" target="_blank">
-                        <img src="static/img/tg_icon.svg" class="navbar-nav-svg" width="20" height="20">
+                        <img src="/static/img/tg_icon.svg" class="navbar-nav-svg" width="20" height="20">
                     </a>
                 </li>
                 <li class="nav-item col-6 col-lg-auto">
                     <a class="nav-link"
                        href="https://wa.me/79653721297?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%2C%20%D1%8F%20%D0%B7%D0%B0%20%D1%82%D0%BE%D1%80%D1%82%D0%B8%D0%BA%D0%BE%D0%BC!"
                        target="_blank">
-                        <img src="static/img/wts_icon.svg" class="navbar-nav-svg" width="20" height="20">
+                        <img src="/static/img/wts_icon.svg" class="navbar-nav-svg" width="20" height="20">
                     </a>
                 </li>
             </ul>
@@ -57,17 +57,17 @@
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
 </body>
-<script>
-    $(document).ready(function() {
-        activeLinkControl()
-    })
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        activeLinkControl()-->
+<!--    })-->
 
-    function activeLinkControl() {
-        $('.navbar-nav .nav-link').click(function () {
-            alert($(this).classList)
-            $(this).classList.add('active')
-            {#$(this).closest('.nav-link').addClass('active')#}
-        })
-    }
-</script>
+<!--    function activeLinkControl() {-->
+<!--        $('.navbar-nav .nav-link').click(function () {-->
+<!--            alert($(this).classList)-->
+<!--            $(this).classList.add('active')-->
+<!--            {#$(this).closest('.nav-link').addClass('active')#}-->
+<!--        })-->
+<!--    }-->
+<!--</script>-->
 </html>
