@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+<div class="container-fluid" style="padding-right: 100px; padding-left: 100px; padding-top: 50px">
+    <div class="row">
+        <div class="col">
+            <div style="background-image: url(static/img/bg2.jpg); background-size: cover; height: 750px; width: 100%;">
+                <div style="position: relative; top: 500px;">
+                    <h1 style="color: #FF84C0; font-size: 5rem;">Десерты на заказ</h1>
+                    <h1 style="color: black; font-size: 5rem;">в Москве</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding: 100px 100px 100px 100px;">
+    <div class="row d-flex justify-content-center">
+        <div class="row m-3">
+            <div class="col-lg-6">
+                <img src="/static/img/kate2.png" width="300px" height="300px">
+            </div>
+            <div class="col-lg-6">
+                <h3 style="color: #FF84C0;">Мое вдохновение</h3>
+                <h3 style="color: black;">- Довольные клиенты</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Vestibulum facilisis nisl faucibus elementum odio enim lobortis.
+                    Eget ac ut tincidunt pulvinar egestas amet, dolor mi. Tincidunt
+                    massa sed viverra risus ut integer pellentesque ipsum. Purus
+                    tincidunt magna porta ac in cras.</p>
+            </div>
+        </div>
+
+        <div class="row m-3">
+            <div class="row">
+                <div class="col d-flex justify-content-center">
+                    <h3>Торты</h3>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-around gy-3">
+                {% for cake in cakes[:4] %}
+                    {% include 'cake.html' %}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
