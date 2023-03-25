@@ -11,6 +11,7 @@ def index():
              ('static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
              ('static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
              ('static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!')]
+
     return render_template('index.html', cakes=cakes)
 
 
