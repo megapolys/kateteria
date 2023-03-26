@@ -8,11 +8,10 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    cakes = [('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!')]
+    cakes = [(['/static/cakes/0/cake1.jpg', '/static/cakes/0/cake2.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4()),
+             (['/static/cakes/0/cake1.jpg', '/static/cakes/0/cake2.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4()),
+             (['/static/cakes/0/cake1.jpg', '/static/cakes/0/cake2.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4()),
+             (['/static/cakes/0/cake2.jpg', '/static/cakes/0/cake1.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4())]
 
     return render_template('index.html', cakes=cakes, active_page=0)
 
