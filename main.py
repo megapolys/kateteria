@@ -63,7 +63,7 @@ def load_user(user_id):
 @app.route('/index')
 def index():
     cakes, n_cake_pages = get_cakes()
-    return render_template('index.html', cakes=cakes)
+    return render_template('index.html', cakes=cakes, active_page=0)
 
 
 @app.route('/cakes/<int:cake_active_page>')
