@@ -2,8 +2,7 @@
 
 {% block content %}
 
-
-
+{% import 'cake.html' as macros %}
 
 <div class="container-fluid" style="padding-right: 100px; padding-left: 100px; padding-top: 50px">
     <div class="row">
@@ -44,7 +43,7 @@
 
             <div class="row d-flex justify-content-around gy-3">
                 {% for cake in cakes[:4] %}
-                    {% include 'cake.html' %}
+                    {{ macros.render_cake(cake, False) }}
                 {% endfor %}
 
             </div>

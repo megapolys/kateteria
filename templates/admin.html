@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% import 'cake.html' as macros %}
+
+{% block content %}
+    <div class="row g-4 gy-3 mt-0">
+        {% for cake in cakes %}
+            {{ macros.render_cake(cake, True) }}
+        {% endfor %}
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCakeForm">Добавить торт</button>
+    </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="createCakeForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Добавить торт</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+            <div class="mb-3">
+                {{ form.title.label(class="visually-hidden") }}
+                {{ form.title(placeholder=form.title.label.text) }}
+            </div>
+            <div class="mb-3">
+                {{ form.description.label(class="visually-hidden") }}
+                {{ form.description(placeholder=form.description.label.text) }}
+            </div>
+            <div class="mb-3">
+                {{ form.images.label(class="visually-hidden") }}
+                {{ form.images(placeholder=form.images.label.text) }}
+            </div>
+            <div class="mb-3">
+                {{ form.submit(class="btn btn-primary mb-3") }}
+            </div>
+            {{ message }}
+        </form>
+      </div>
+<!--      <div class="modal-footer">-->
+<!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--        <button type="button" class="btn btn-primary">Understood</button>-->
+<!--      </div>-->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
