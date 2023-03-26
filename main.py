@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from math import ceil
+import uuid
 
 app = Flask(__name__)
 
@@ -7,11 +8,11 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    cakes = [('static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!')]
+    cakes = [('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
+             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
+             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
+             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
+             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!')]
 
     return render_template('index.html', cakes=cakes, active_page=0)
 
@@ -21,20 +22,8 @@ def cakes(cake_active_page):
 
     CAKES_PER_PAGE = 5
 
-    cakes = [('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake2.jpg', 'Клубничный торт', 'Заказывай, Пес!'),
-             ('/static/img/cake1.jpg', 'Клубничный торт', 'Заказывай, Пес!')]
+    cakes = [(['/static/cakes/0/cake1.jpg', '/static/cakes/0/cake2.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4()),
+             (['/static/cakes/0/cake2.jpg', '/static/cakes/0/cake1.jpg'], 'Клубничный торт', 'Заказывай, Пес!', uuid.uuid4())]
     n_cake_pages = ceil(len(cakes) / CAKES_PER_PAGE)
     return render_template('cakes.html',
                            cakes=cakes,
