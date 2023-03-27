@@ -3,10 +3,16 @@
 
 {% block content %}
     <div class="container start-50" style="padding: 100px 100px 100px 100px;">
-        <div class="row col-3">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createCakeForm">
-                Добавить торт
-            </button>
+        <div class="row">
+            <div class="col-10">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#createCakeForm">
+                    Добавить торт
+                </button>
+            </div>
+            <div class="col-2">
+                <a href="/admin_login?action=logout" role="button" class="btn btn-warning">Выйти</a>
+            </div>
         </div>
         <div class="row g-4 gy-3 mt-0">
             {% for cake in cakes %}
@@ -29,11 +35,11 @@
                         {{ form.csrf_token() }}
                         <div class="mb-3">
                             {{ form.title.label(class="visually-hidden") }}
-                            {{ form.title(placeholder=form.title.label.text) }}
+                            {{ form.title(placeholder=form.title.label.text,class="w-100") }}
                         </div>
                         <div class="mb-3">
                             {{ form.description.label(class="visually-hidden") }}
-                            {{ form.description(placeholder=form.description.label.text) }}
+                            {{ form.description(placeholder=form.description.label.text,class="w-100") }}
                         </div>
                         <div class="mb-3">
                             {{ form.images.label(class="visually-hidden") }}

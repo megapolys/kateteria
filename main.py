@@ -90,7 +90,11 @@ def feedback():
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if current_user.is_authenticated:
-        return redirect('/admin')
+        if request.args.get('action', None) == 'logout':
+            logout_user()
+            return redirect('/admin_login')
+        else:
+            return redirect('/admin')
 
     login_form = AdminLoginForm()
     if login_form.validate_on_submit():
