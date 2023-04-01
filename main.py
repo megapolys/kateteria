@@ -8,6 +8,7 @@ import configparser
 import uuid
 import glob
 import os
+import shutil
 
 from forms import *
 
@@ -120,7 +121,7 @@ def admin_login():
 @app.route('/admin')
 @login_required
 def admin():
-    form = CakeCreateForm()
+    form = CakeForm()
     if request.args.get('entity', None) == 'cake':
         if request.args['action'] == 'update':
             print(request.args['id'], request.args['action'])
@@ -130,12 +131,11 @@ def admin():
                              host=config['database']['host'],
                              database=config['database']['name']) as con:
                 cur = con.cursor()
-                print(int(request.args['id']))
                 cur.execute('DELETE FROM cakes WHERE id = %s', request.args['id'])
                 con.commit()
 
                 if os.path.exists(f'static/cakes/{request.args["id"]}'):
-                    os.rmdir(f'static/cakes/{request.args["id"]}')
+                    shutil.rmtree(f'static/cakes/{request.args["id"]}')
 
     cakes, n_cake_pages = get_cakes()
     return render_template('admin.html', cakes=cakes, n_cake_pages=n_cake_pages, form=form)
@@ -144,7 +144,7 @@ def admin():
 @app.route('/create_cake', methods=['GET', 'POST'])
 @login_required
 def create_cake():
-    form = CakeCreateForm()
+    form = CakeForm()
     if form.validate_on_submit():
         with sql.connect(user=config['database']['user'],
                          password=config['database']['password'],
@@ -161,6 +161,29 @@ def create_cake():
 
             if not os.path.exists(f'static/cakes/{cake_id}'):
                 os.mkdir(f'static/cakes/{cake_id}', mode=0o777)
+            for img in form.images.data:
+                img.save(f'./static/cakes/{cake_id}/{secure_filename(img.filename)}')
+
+    return redirect('/admin')
+
+
+@app.route('/update_cake/<int:cake_id>', methods=['GET', 'POST'])
+@login_required
+def update_cake(cake_id):
+    form = CakeForm()
+    if form.validate_on_submit():
+        with sql.connect(user=config['database']['user'],
+                         password=config['database']['password'],
+                         host=config['database']['host'],
+                         database=config['database']['name']) as con:
+            cur = con.cursor()
+            cur.execute(f'UPDATE cakes SET title = %s, description = %s WHERE id = {cake_id};',
+                        (form.title.data, form.description.data))
+            con.commit()
+
+            for root, dirs, files in os.walk(f'./static/cakes/{cake_id}', topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
             for img in form.images.data:
                 img.save(f'./static/cakes/{cake_id}/{secure_filename(img.filename)}')
 

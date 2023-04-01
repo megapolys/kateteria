@@ -9,8 +9,9 @@
                 <p class="card-text">{{ cake['desc'] }}</p>
             </div>
             {% if is_admin %}
-                <a href="/admin?entity=cake&action=update&id={{cake['id']}}" role="button" class="btn btn-primary">Изменить</a>
-                <a href="/admin?entity=cake&action=delete&id={{cake['id']}}" role="button" class="btn btn-danger">Удалить</a>
+                <a href="#" onClick="editBtnClicked({{ cake['id'] }})" role="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#createCakeForm">Изменить</a>
+                <a href="#" onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=cake&action=delete&id={{cake['id']}}');" role="button" class="btn btn-danger">Удалить</a>
             {% endif %}
         </div>
     </div>

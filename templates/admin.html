@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-10">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#createCakeForm">
+                        data-bs-target="#createCakeForm" onclick="createBtnClicked();">
                     Добавить торт
                 </button>
             </div>
@@ -31,8 +31,9 @@
                 </div>
 
                 <div class="modal-body">
-                    <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data">
+                    <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data" id="cakeForm">
                         {{ form.csrf_token() }}
+                        {{ form.cake_id() }}
                         <div class="mb-3">
                             {{ form.title.label(class="visually-hidden") }}
                             {{ form.title(placeholder=form.title.label.text,class="w-100") }}
@@ -58,5 +59,54 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        var cakes_js = [];
+        {% for i in range(cakes | length) %}
+        cakes_js.push({'id': {{ cakes[i]['id'] }}, 'title': '{{ cakes[i]['title'] }}', 'desc': '{{ cakes[i]['desc']}}' });
+        {% endfor %}
+
+        function editBtnClicked(cake_id) {
+            var input = document.getElementById("cakeId");
+            input.value = cake_id;
+
+            var form = document.getElementById("cakeForm");
+            form.action = '/update_cake/' + cake_id;
+
+            var button = document.getElementById("cakeSubmit");
+            button.value = 'Изменить';
+
+            var cake = null;
+            for (var i = 0; i < cakes_js.length; i++)
+                if (cakes_js[i]['id'] == cake_id) {
+                    cake = cakes_js[i];
+                    break;
+                }
+
+            var name = document.getElementById("cakeName");
+            name.value = cake['title'];
+
+            var desc = document.getElementById("cakeDesc");
+            desc.value = cake['desc'];
+        }
+
+        function createBtnClicked() {
+            var input = document.getElementById("cakeId");
+            input.value = -1;
+
+            var form = document.getElementById("cakeForm");
+            form.action = '/create_cake'
+
+            var button = document.getElementById("cakeSubmit");
+            button.value = 'Добавить';
+
+            var name = document.getElementById("cakeName");
+            name.value = '';
+
+            var desc = document.getElementById("cakeDesc");
+            desc.value = '';
+        }
+    </script>
 
 {% endblock %}
