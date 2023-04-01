@@ -27,25 +27,9 @@
                 <a class="nav-link {{ 'active' if active_page == 2 else '' }}" href="/cakes/1">Торты</a>
                 <a class="nav-link {{ 'active' if active_page == 3 else '' }}" href="/feedback">Отзывы</a>
             </div>
-            <ul class="navbar-nav ms-md-auto">
-                <li class="nav-item col-6 col-lg-auto">
-                    <a class="nav-link" href="https://vk.com/katya_konditer1" target="_blank">
-                        <img src="/static/img/vk_icon.svg" class="navbar-nav-svg" width="20" height="20">
-                    </a>
-                </li>
-                <li class="nav-item col-6 col-lg-auto">
-                    <a class="nav-link" href="https://t.me/UltraDiscountGS" target="_blank">
-                        <img src="/static/img/tg_icon.svg" class="navbar-nav-svg" width="20" height="20">
-                    </a>
-                </li>
-                <li class="nav-item col-6 col-lg-auto">
-                    <a class="nav-link"
-                       href="https://wa.me/79653721297?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%2C%20%D1%8F%20%D0%B7%D0%B0%20%D1%82%D0%BE%D1%80%D1%82%D0%B8%D0%BA%D0%BE%D0%BC!"
-                       target="_blank">
-                        <img src="/static/img/wts_icon.svg" class="navbar-nav-svg" width="20" height="20">
-                    </a>
-                </li>
-            </ul>
+            <div class="navbar-nav ms-md-auto">
+                {% include 'soc_links.html' %}
+            </div>
         </div>
     </div>
 </nav>
@@ -59,24 +43,7 @@
             <div class="col-lg-3 md-3">
                 <a class="navbar-brand d-inline-flex align-items-center mb-0 text-decoration-none" href="/index"
                    style="font-family: 'Neillgates'; font-size: 4rem;">Kateteria</a>
-                <div class="grid gap-0">
-                    <span class="p-1">
-                        <a class="text-decoration-none" href="https://vk.com/katya_konditer1" target="_blank">
-                            <img src="/static/img/vk_icon.svg" class="svg" width="20" height="20">
-                        </a>
-                    </span>
-                    <span class="p-1">
-                        <a class="text-decoration-none"  href="https://t.me/UltraDiscountGS" target="_blank">
-                            <img src="/static/img/tg_icon.svg" class="svg" width="20" height="20">
-                        </a>
-                    </span>
-                    <span class="p-1">
-                        <a class="text-decoration-none"  href="https://wa.me/79653721297?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%2C%20%D1%8F%20%D0%B7%D0%B0%20%D1%82%D0%BE%D1%80%D1%82%D0%B8%D0%BA%D0%BE%D0%BC!"
-                           target="_blank">
-                            <img src="/static/img/wts_icon.svg" class="svg" width="20" height="20">
-                        </a>
-                    </span>
-                </div>
+                {% include 'soc_links.html' %}
             </div>
             <div class="col-6 col-lg-2 ofset-lg-1 mb-3 mt-4">
                 <h5>Разделы</h5>

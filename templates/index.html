@@ -9,7 +9,7 @@
             <div class="col">
                 <div style="background-image: url('static/img/bg2.jpg'); background-size: cover; height: 750px; width: 100%;">
                     <div style="position: relative; top: 500px;">
-                        <h1 style="color: #FF84C0; font-size: 5rem;">Десерты на заказ</h1>
+                        <h1 class="pinky-color" style="font-size: 5rem;">Десерты на заказ</h1>
                         <h1 style="color: black; font-size: 5rem;">в Москве</h1>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                     <img src="/static/img/kate2.png" width="300px" height="300px">
                 </div>
                 <div class="col-lg-6">
-                    <h3 style="color: #FF84C0;">Мое вдохновение</h3>
+                    <h3 class="pinky-color">Мое вдохновение</h3>
                     <h3 style="color: black;">- Довольные клиенты</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Vestibulum facilisis nisl faucibus elementum odio enim lobortis.
@@ -46,12 +46,18 @@
                         {{ macros.render_cake(cake, False) }}
                     {% endfor %}
                 </div>
+
+                <div class="row my-3">
+                    <div class="col d-flex justify-content-center">
+                        <button type="button" class="btn btn-outline-custom">БОЛЬШЕ ТОРТОВ</button>
+                    </div>
+                </div>
             </div>
 
             <div class="row m-3">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
-                        <h3 style="color: #FF84C0;">Отзывы&nbsp;</h3>
+                        <h3 class="pinky_color">Отзывы&nbsp;</h3>
                         <h3>о работе</h3>
                     </div>
                 </div>
@@ -75,7 +81,7 @@
                 </div>
 
                 <div class="row gy-3">
-                    <div class="col-6 col-md-4">
+                    <div class="col-lg-6">
                         <div class="py-3">
                             <div class="py-2">
                                 ТЕЛЕФОН
@@ -92,8 +98,16 @@
                                 Москва, ул. Братиславская, д. 23
                             </h4>
                         </div>
+                        <div class="py-3">
+                            <div class="py-2">
+                                Я В СОЦСЕТЯХ
+                            </div>
+                            <div class="py-2">
+                                {% include 'soc_links.html' %}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4">
+                    <div class="col-lg-6">
                         <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A3649af7471d4796b172d2e045368e63f1484c834af227ee82b9e3e7b958bf683&amp;width=100%&amp;height=400&amp;lang=ru_RU&amp;scroll=true"></script>
                     </div>
                 </div>
