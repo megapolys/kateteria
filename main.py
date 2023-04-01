@@ -14,7 +14,6 @@ from forms import *
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config['forms']['csrf_password']
 
@@ -48,6 +47,10 @@ def get_cakes():
         return cooked_cakes, n_cake_pages
 
 
+def get_feedback():
+    return ['/' + p for p in glob.glob(f'static/feedback/*')]
+
+
 @login_manager.user_loader
 def load_user(user_id):
     with sql.connect(user=config['database']['user'],
@@ -63,7 +66,7 @@ def load_user(user_id):
 @app.route('/index')
 def index():
     cakes, n_cake_pages = get_cakes()
-    return render_template('index.html', cakes=cakes, active_page=0)
+    return render_template('index.html', cakes=cakes, active_page=0, feedback=get_feedback())
 
 
 @app.route('/cakes/<int:cake_active_page>')
@@ -84,7 +87,7 @@ def about():
 
 @app.route('/feedback')
 def feedback():
-    return render_template('feedback.html', active_page=3)
+    return render_template('feedback.html', active_page=3, feedback=get_feedback())
 
 
 @app.route('/admin_login', methods=['GET', 'POST'])
@@ -148,7 +151,8 @@ def create_cake():
                          host=config['database']['host'],
                          database=config['database']['name']) as con:
             cur = con.cursor()
-            cur.execute('INSERT INTO cakes(title, description) VALUES (%s, %s)', (form.title.data, form.description.data))
+            cur.execute('INSERT INTO cakes(title, description) VALUES (%s, %s)',
+                        (form.title.data, form.description.data))
             con.commit()
 
             # TODO: fix no cakes case
