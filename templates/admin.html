@@ -21,6 +21,38 @@
         </div>
     </div>
 
+    <div class="container start-50" style="padding: 100px 100px 100px 100px;">
+        <div class="row d-flex justify-content-center">
+            <div class="row m-3">
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <h3 style="color: #FF84C0;">Отзывы&nbsp;</h3>
+                        <h3>о работе</h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-10">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFeedbackForm">
+                            Добавить отзыв
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-around gy-3">
+                    {% for src in feedback %}
+                        <div class="col-xl-3" style="width: 250px;">
+                            <div class="card h-100">
+                                <img src="{{ src }}" class="card-img-top" width="200px" height="400px" alt="...">
+                                <a href="#" onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=feedback&action=delete&id={{loop.index0}}');" role="button" class="btn btn-danger">Удалить</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade" id="createCakeForm" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -32,22 +64,52 @@
 
                 <div class="modal-body">
                     <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data" id="cakeForm">
-                        {{ form.csrf_token() }}
-                        {{ form.cake_id() }}
+                        {{ cake_form.csrf_token() }}
+                        {{ cake_form.cake_id() }}
                         <div class="mb-3">
-                            {{ form.title.label(class="visually-hidden") }}
-                            {{ form.title(placeholder=form.title.label.text,class="w-100") }}
+                            {{ cake_form.title.label(class="visually-hidden") }}
+                            {{ cake_form.title(placeholder=cake_form.title.label.text,class="w-100") }}
                         </div>
                         <div class="mb-3">
-                            {{ form.description.label(class="visually-hidden") }}
-                            {{ form.description(placeholder=form.description.label.text,class="w-100") }}
+                            {{ cake_form.description.label(class="visually-hidden") }}
+                            {{ cake_form.description(placeholder=cake_form.description.label.text,class="w-100") }}
                         </div>
                         <div class="mb-3">
-                            {{ form.images.label(class="visually-hidden") }}
-                            {{ form.images(placeholder=form.images.label.text) }}
+                            {{ cake_form.images.label(class="visually-hidden") }}
+                            {{ cake_form.images(placeholder=cake_form.images.label.text) }}
                         </div>
                         <div class="mb-3">
-                            {{ form.submit(class="btn btn-primary mb-3") }}
+                            {{ cake_form.submit(class="btn btn-primary mb-3") }}
+                        </div>
+                        {{ message }}
+                    </form>
+                </div>
+                <!--      <div class="modal-footer">-->
+                <!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+                <!--        <button type="button" class="btn btn-primary">Understood</button>-->
+                <!--      </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addFeedbackForm" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdrop">Добавить отзыв</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form method="post" class="row g-3" action="/create_feedback" enctype="multipart/form-data">
+                        {{ feedback_form.csrf_token() }}
+                        <div class="mb-3">
+                            {{ feedback_form.image.label(class="visually-hidden") }}
+                            {{ feedback_form.image(placeholder=feedback_form.image.label.text) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ feedback_form.submit(class="btn btn-primary mb-3") }}
                         </div>
                         {{ message }}
                     </form>

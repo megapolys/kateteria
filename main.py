@@ -9,6 +9,7 @@ import uuid
 import glob
 import os
 import shutil
+import time
 
 from forms import *
 
@@ -39,7 +40,7 @@ def get_cakes():
         cur = con.cursor()
         cur.execute('SELECT * FROM cakes;')
         raw_cakes = cur.fetchall()
-        cooked_cakes = [{'imgs': ['/' + p for p in glob.glob(f'static/cakes/{id}/*')],
+        cooked_cakes = [{'imgs': ['/' + p for p in glob.glob(f'static/img/cakes/{id}/*')],
                          'title': title,
                          'desc': desc,
                          'uuid': uuid.uuid4(),
@@ -49,7 +50,7 @@ def get_cakes():
 
 
 def get_feedback():
-    return ['/' + p for p in glob.glob(f'static/feedback/*')]
+    return ['/' + p for p in glob.glob(f'static/img/feedback/*')]
 
 
 @login_manager.user_loader
@@ -121,11 +122,11 @@ def admin_login():
 @app.route('/admin')
 @login_required
 def admin():
-    form = CakeForm()
+    cake_form = CakeForm()
+    feedback_form = FeedbackForm()
+    feedback = get_feedback()
     if request.args.get('entity', None) == 'cake':
-        if request.args['action'] == 'update':
-            print(request.args['id'], request.args['action'])
-        elif request.args['action'] == 'delete':
+        if request.args['action'] == 'delete':
             with sql.connect(user=config['database']['user'],
                              password=config['database']['password'],
                              host=config['database']['host'],
@@ -134,11 +135,18 @@ def admin():
                 cur.execute('DELETE FROM cakes WHERE id = %s', request.args['id'])
                 con.commit()
 
-                if os.path.exists(f'static/cakes/{request.args["id"]}'):
-                    shutil.rmtree(f'static/cakes/{request.args["id"]}')
+                if os.path.exists(f'static/img/cakes/{request.args["id"]}'):
+                    shutil.rmtree(f'static/img/cakes/{request.args["id"]}')
+    elif request.args.get('entity', None) == 'feedback':
+        os.remove('.' + feedback[int(request.args["id"])])
 
     cakes, n_cake_pages = get_cakes()
-    return render_template('admin.html', cakes=cakes, n_cake_pages=n_cake_pages, form=form)
+    return render_template('admin.html',
+                           cakes=cakes,
+                           n_cake_pages=n_cake_pages,
+                           cake_form=cake_form,
+                           feedback_form=feedback_form,
+                           feedback=get_feedback())
 
 
 @app.route('/create_cake', methods=['GET', 'POST'])
@@ -159,10 +167,10 @@ def create_cake():
             cur.execute('SELECT max(id) FROM cakes')
             cake_id = cur.fetchone()[0]
 
-            if not os.path.exists(f'static/cakes/{cake_id}'):
-                os.mkdir(f'static/cakes/{cake_id}', mode=0o777)
+            if not os.path.exists(f'static/img/cakes/{cake_id}'):
+                os.mkdir(f'static/img/cakes/{cake_id}', mode=0o777)
             for img in form.images.data:
-                img.save(f'./static/cakes/{cake_id}/{secure_filename(img.filename)}')
+                img.save(f'./static/img/cakes/{cake_id}/{secure_filename(img.filename)}')
 
     return redirect('/admin')
 
@@ -181,11 +189,23 @@ def update_cake(cake_id):
                         (form.title.data, form.description.data))
             con.commit()
 
-            for root, dirs, files in os.walk(f'./static/cakes/{cake_id}', topdown=False):
-                for name in files:
-                    os.remove(os.path.join(root, name))
-            for img in form.images.data:
-                img.save(f'./static/cakes/{cake_id}/{secure_filename(img.filename)}')
+            print(form.images.data)
+            if len(form.images.data) > 1 or form.images.data[0].filename:
+                for root, dirs, files in os.walk(f'static/img/cakes/{cake_id}', topdown=False):
+                    for name in files:
+                        os.remove(os.path.join(root, name))
+                for i, img in enumerate(form.images.data):
+                    img.save(f'./static/img/cakes/{cake_id}/{i}' + f'_{img.filename.split(".")[-1]}')
+
+    return redirect('/admin')
+
+
+@app.route('/create_feedback', methods=['GET', 'POST'])
+@login_required
+def create_feedback():
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        form.image.data.save(f'./static/img/feedback/{time.time()}.{form.image.data.filename.split(".")[-1]}')
 
     return redirect('/admin')
 

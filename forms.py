@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField, SubmitField, StringField, TextAreaField, MultipleFileField, HiddenField
+from wtforms import PasswordField, BooleanField, \
+    SubmitField, StringField, TextAreaField, \
+    MultipleFileField, HiddenField, FileField
 from wtforms.validators import DataRequired
 
 
@@ -15,3 +17,9 @@ class CakeForm(FlaskForm):
     description = TextAreaField('Описание:', id='cakeDesc')
     images = MultipleFileField('Картинки')
     submit = SubmitField('Добавить', id='cakeSubmit')
+
+
+class FeedbackForm(FlaskForm):
+    image = FileField('Картинка')
+    submit = SubmitField('Добавить')
+
