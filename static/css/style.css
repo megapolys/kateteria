@@ -2,3 +2,6 @@
     font-family: 'Neillgates'; /*a name to be used later*/
     src: url('/static/fonts/neillgates.ttf'); /*URL to font*/
 }
+.pinky-color {
+  color: #FF84C0;
+}

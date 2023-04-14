@@ -68,7 +68,7 @@ def load_user(user_id):
 @app.route('/index')
 def index():
     cakes, n_cake_pages = get_cakes()
-    return render_template('index.html', cakes=cakes, active_page=0, feedback=get_feedback())
+    return render_template('index.html', cakes=cakes, active_page=0, feedback=get_feedback(), is_admin=current_user.is_authenticated)
 
 
 @app.route('/cakes/<int:cake_active_page>')
@@ -79,17 +79,18 @@ def cakes(cake_active_page):
                            active_page=2,
                            cake_active_page=cake_active_page,
                            n_cake_pages=n_cake_pages,
-                           CAKES_PER_PAGE=int(config['view']['cakes_per_page']))
+                           CAKES_PER_PAGE=int(config['view']['cakes_per_page']),
+                           is_admin=current_user.is_authenticated)
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html', active_page=1)
+    return render_template('about.html', active_page=1, is_admin=current_user.is_authenticated)
 
 
 @app.route('/feedback')
 def feedback():
-    return render_template('feedback.html', active_page=3, feedback=get_feedback())
+    return render_template('feedback.html', active_page=3, feedback=get_feedback(), is_admin=current_user.is_authenticated)
 
 
 @app.route('/admin_login', methods=['GET', 'POST'])
@@ -97,7 +98,7 @@ def admin_login():
     if current_user.is_authenticated:
         if request.args.get('action', None) == 'logout':
             logout_user()
-            return redirect('/admin_login')
+            return redirect('/index')
         else:
             return redirect('/admin')
 
@@ -146,7 +147,8 @@ def admin():
                            n_cake_pages=n_cake_pages,
                            cake_form=cake_form,
                            feedback_form=feedback_form,
-                           feedback=get_feedback())
+                           feedback=get_feedback(),
+                           is_admin=True)
 
 
 @app.route('/create_cake', methods=['GET', 'POST'])

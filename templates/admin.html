@@ -2,52 +2,69 @@
 {% import 'cake.html' as macros %}
 
 {% block content %}
-    <div class="container start-50" style="padding: 100px 100px 100px 100px;">
-        <div class="row">
-            <div class="col-10">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#createCakeForm" onclick="createBtnClicked();">
-                    Добавить торт
-                </button>
-            </div>
-            <div class="col-2">
-                <a href="/admin_login?action=logout" role="button" class="btn btn-warning">Выйти</a>
-            </div>
-        </div>
-        <div class="row g-4 gy-3 mt-0">
-            {% for cake in cakes %}
-                {{ macros.render_cake(cake, True) }}
-            {% endfor %}
-        </div>
-    </div>
 
     <div class="container start-50" style="padding: 100px 100px 100px 100px;">
-        <div class="row d-flex justify-content-center">
-            <div class="row m-3">
-                <div class="row">
-                    <div class="col d-flex justify-content-center">
-                        <h3 style="color: #FF84C0;">Отзывы&nbsp;</h3>
-                        <h3>о работе</h3>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-10">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFeedbackForm">
-                            Добавить отзыв
-                        </button>
-                    </div>
-                </div>
-
-                <div class="row d-flex justify-content-around gy-3">
-                    {% for src in feedback %}
-                        <div class="col-xl-3" style="width: 250px;">
-                            <div class="card h-100">
-                                <img src="{{ src }}" class="card-img-top" width="200px" height="400px" alt="...">
-                                <a href="#" onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=feedback&action=delete&id={{loop.index0}}');" role="button" class="btn btn-danger">Удалить</a>
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseOne">
+                        <h3>Торты</h3>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-10">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#createCakeForm" onclick="createBtnClicked();">
+                                    Добавить торт
+                                </button>
                             </div>
                         </div>
-                    {% endfor %}
+
+                        <div class="row justify-content-around g-4 gy-3 mt-0">
+                            {% for cake in cakes %}
+                                {{ macros.render_cake(cake, True) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseTwo">
+                        <h3>Отзывы о работе</h3>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-10">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#addFeedbackForm">
+                                    Добавить отзыв
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-around g-4 gy-3 mt-2">
+                            {% for src in feedback %}
+                                <div class="col-xl-3" style="width: 250px;">
+                                    <div class="card h-100">
+                                        <img src="{{ src }}" class="card-img-top" width="200px" height="400px"
+                                             alt="...">
+                                        <a href="#"
+                                           onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=feedback&action=delete&id={{ loop.index0 }}');"
+                                           role="button" class="btn btn-danger">Удалить</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,7 +80,8 @@
                 </div>
 
                 <div class="modal-body">
-                    <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data" id="cakeForm">
+                    <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data"
+                          id="cakeForm">
                         {{ cake_form.csrf_token() }}
                         {{ cake_form.cake_id() }}
                         <div class="mb-3">
@@ -126,7 +144,11 @@
 
         var cakes_js = [];
         {% for i in range(cakes | length) %}
-        cakes_js.push({'id': {{ cakes[i]['id'] }}, 'title': '{{ cakes[i]['title'] }}', 'desc': '{{ cakes[i]['desc']}}' });
+            cakes_js.push({
+                'id': {{ cakes[i]['id'] }},
+                'title': '{{ cakes[i]['title'] }}',
+                'desc': '{{ cakes[i]['desc']}}'
+            });
         {% endfor %}
 
         function editBtnClicked(cake_id) {
