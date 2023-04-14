@@ -4,11 +4,11 @@
 
     {% import 'cake.html' as macros %}
 
-    <div class="container-fluid" style="padding-right: 100px; padding-left: 100px; padding-top: 50px">
+    <div class="container-fluid">
         <div class="row">
             <div class="col">
                 <div style="background-image: url('static/img/bg2.jpg'); background-size: cover; height: 750px; width: 100%;">
-                    <div style="position: relative; top: 500px;">
+                    <div style="position: relative; top: 450px; padding-left: 50px">
                         <h1 class="pinky-color" style="font-size: 5rem;">Десерты на заказ</h1>
                         <h1 style="color: black; font-size: 5rem;">в Москве</h1>
                     </div>
@@ -17,11 +17,11 @@
         </div>
     </div>
 
-    <div class="container" style="padding: 100px 100px 100px 100px;">
+    <div class="container">
         <div class="row d-flex justify-content-center">
-            <div class="row m-3">
+            <div class="row m-5">
                 <div class="col-lg-6">
-                    <img src="/static/img/kate2.png" width="300px" height="300px">
+                    <img src="/static/img/kate2.png" width="400px" height="400px">
                 </div>
                 <div class="col-lg-6">
                     <h3 class="pinky-color">Мое вдохновение</h3>
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="row m-3">
+            <div class="row m-5">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
                         <h3>Торты</h3>
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="row m-3">
+            <div class="row m-5">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
                         <h3 class="pinky-color">Отзывы&nbsp;</h3>
@@ -64,9 +64,9 @@
 
                 <div class="row d-flex justify-content-around gy-3">
                     {% for src in feedback[:4] %}
-                        <div class="col-xl-3" style="width: 250px;">
+                        <div class="col-xl-3" style="width: 300px;">
                             <div class="card h-100">
-                                <img src="{{ src }}" class="card-img-top" width="200px" height="400px" alt="...">
+                                <img src="{{ src }}" class="card-img-top" width="250px" height="500px" alt="...">
                             </div>
                         </div>
                     {% endfor %}
@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="row m-3">
+            <div class="row m-5">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
                         <h3>Контакты</h3>

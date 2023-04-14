@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, BooleanField, \
-    SubmitField, StringField, TextAreaField, \
+    SubmitField, StringField, TextAreaField, IntegerField, \
     MultipleFileField, HiddenField, FileField
 from wtforms.validators import DataRequired
 
@@ -15,6 +15,7 @@ class CakeForm(FlaskForm):
     title = StringField('Название:', id='cakeName')
     cake_id = HiddenField(id='cakeId', default=-1)
     description = TextAreaField('Описание:', id='cakeDesc')
+    cost = IntegerField('Стоимость в руб/кг', id='cakeCost')
     images = MultipleFileField('Картинки')
     submit = SubmitField('Добавить', id='cakeSubmit')
 

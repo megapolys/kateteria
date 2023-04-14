@@ -1,12 +1,15 @@
 {% macro render_cake(cake, is_admin) %}
-    <div class="col-xl-3" style="width: 250px;">
+    <div class="col-xl-3" style="width: 300px;">
         <div class="card h-100">
             <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#{{ cake['uuid'] }}">
-                <img src="{{ cake['imgs'][0] }}" class="card-img-top" width="200px" height="200px" alt="...">
+                <img src="{{ cake['imgs'][0] }}" class="card-img-top" width="250px" height="250px" alt="...">
             </button>
-            <div class="card-body">
+            <div class="card-body position-relative">
                 <h5>{{ cake['title'] }}</h5>
                 <p class="card-text">{{ cake['desc'] }}</p>
+                <div class="position-absolute bottom-0">
+                    <p class="card-text fs-3">{{ cake['cost'] }} руб/кг</p>
+                </div>
             </div>
             {% if is_admin %}
                 <a href="#" onClick="editBtnClicked({{ cake['id'] }})" role="button" class="btn btn-primary" data-bs-toggle="modal"

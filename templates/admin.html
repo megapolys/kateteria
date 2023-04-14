@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <div class="container start-50" style="padding: 100px 100px 100px 100px;">
+    <div class="container start-50">
         <div class="accordion" id="accordionPanelsStayOpenExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -53,9 +53,9 @@
 
                         <div class="row justify-content-around g-4 gy-3 mt-2">
                             {% for src in feedback %}
-                                <div class="col-xl-3" style="width: 250px;">
+                                <div class="col-xl-3" style="width: 300px;">
                                     <div class="card h-100">
-                                        <img src="{{ src }}" class="card-img-top" width="200px" height="400px"
+                                        <img src="{{ src }}" class="card-img-top" width="250px" height="500px"
                                              alt="...">
                                         <a href="#"
                                            onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=feedback&action=delete&id={{ loop.index0 }}');"
@@ -91,6 +91,10 @@
                         <div class="mb-3">
                             {{ cake_form.description.label(class="visually-hidden") }}
                             {{ cake_form.description(placeholder=cake_form.description.label.text,class="w-100") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ cake_form.cost.label(class="visually-hidden") }}
+                            {{ cake_form.cost(placeholder=cake_form.cost.label.text) }}
                         </div>
                         <div class="mb-3">
                             {{ cake_form.images.label(class="visually-hidden") }}
@@ -147,7 +151,8 @@
             cakes_js.push({
                 'id': {{ cakes[i]['id'] }},
                 'title': '{{ cakes[i]['title'] }}',
-                'desc': '{{ cakes[i]['desc']}}'
+                'desc': '{{ cakes[i]['desc'] }}',
+                'cost': '{{ cakes[i]['cost'] }}'
             });
         {% endfor %}
 
@@ -173,6 +178,9 @@
 
             var desc = document.getElementById("cakeDesc");
             desc.value = cake['desc'];
+
+            var cost = document.getElementById("cakeCost");
+            cost.value = cake['cost'];
         }
 
         function createBtnClicked() {
@@ -190,6 +198,9 @@
 
             var desc = document.getElementById("cakeDesc");
             desc.value = '';
+
+            var cost = document.getElementById("cakeCost");
+            cost.value = -1;
         }
     </script>
 

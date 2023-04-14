@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, send_from_directory, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from math import ceil
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -43,8 +43,9 @@ def get_cakes():
         cooked_cakes = [{'imgs': ['/' + p for p in glob.glob(f'static/img/cakes/{id}/*')],
                          'title': title,
                          'desc': desc,
+                         'cost': cost,
                          'uuid': uuid.uuid4(),
-                         'id': id} for id, title, desc in raw_cakes]
+                         'id': id} for id, title, desc, cost in raw_cakes]
         n_cake_pages = ceil(len(cooked_cakes) / int(config['view']['cakes_per_page']))
         return cooked_cakes, n_cake_pages
 
@@ -161,8 +162,8 @@ def create_cake():
                          host=config['database']['host'],
                          database=config['database']['name']) as con:
             cur = con.cursor()
-            cur.execute('INSERT INTO cakes(title, description) VALUES (%s, %s)',
-                        (form.title.data, form.description.data))
+            cur.execute('INSERT INTO cakes(title, description, cost) VALUES (%s, %s, %s)',
+                        (form.title.data, form.description.data, form.cost.data))
             con.commit()
 
             # TODO: fix no cakes case
@@ -171,6 +172,8 @@ def create_cake():
 
             if not os.path.exists(f'static/img/cakes/{cake_id}'):
                 os.mkdir(f'static/img/cakes/{cake_id}', mode=0o777)
+            #     todo: если нету файлов в форме (сейчас ошибка)
+            # можно взять дефолтную картинку типа тортика
             for img in form.images.data:
                 img.save(f'./static/img/cakes/{cake_id}/{secure_filename(img.filename)}')
 
@@ -187,8 +190,8 @@ def update_cake(cake_id):
                          host=config['database']['host'],
                          database=config['database']['name']) as con:
             cur = con.cursor()
-            cur.execute(f'UPDATE cakes SET title = %s, description = %s WHERE id = {cake_id};',
-                        (form.title.data, form.description.data))
+            cur.execute(f'UPDATE cakes SET title = %s, description = %s, cost = %s WHERE id = {cake_id};',
+                        (form.title.data, form.description.data, form.cost.data))
             con.commit()
 
             print(form.images.data)
@@ -211,6 +214,10 @@ def create_feedback():
 
     return redirect('/admin')
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
+    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='img/favicon.ico'))
     app.run(debug=True)
