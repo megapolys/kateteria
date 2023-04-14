@@ -69,7 +69,12 @@ def load_user(user_id):
 @app.route('/index')
 def index():
     cakes, n_cake_pages = get_cakes()
-    return render_template('index.html', cakes=cakes, active_page=0, feedback=get_feedback(), is_admin=current_user.is_authenticated)
+    return render_template('index.html',
+                           cakes=cakes,
+                           active_page=0,
+                           feedback=get_feedback(),
+                           is_admin=current_user.is_authenticated,
+                           title='Главная')
 
 
 @app.route('/cakes/<int:cake_active_page>')
@@ -81,17 +86,25 @@ def cakes(cake_active_page):
                            cake_active_page=cake_active_page,
                            n_cake_pages=n_cake_pages,
                            CAKES_PER_PAGE=int(config['view']['cakes_per_page']),
-                           is_admin=current_user.is_authenticated)
+                           is_admin=current_user.is_authenticated,
+                           title='Торты')
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html', active_page=1, is_admin=current_user.is_authenticated)
+    return render_template('about.html',
+                           active_page=1,
+                           is_admin=current_user.is_authenticated,
+                           title='Обо мне')
 
 
 @app.route('/feedback')
 def feedback():
-    return render_template('feedback.html', active_page=3, feedback=get_feedback(), is_admin=current_user.is_authenticated)
+    return render_template('feedback.html',
+                           active_page=3,
+                           feedback=get_feedback(),
+                           is_admin=current_user.is_authenticated,
+                           title='Отзывы')
 
 
 @app.route('/admin_login', methods=['GET', 'POST'])
@@ -117,8 +130,13 @@ def admin_login():
                 # logout_user()
                 return redirect('/admin')
             else:
-                return render_template('/admin_login.html', form=login_form, message='Пароль неверный!')
-    return render_template('/admin_login.html', form=login_form)
+                return render_template('/admin_login.html',
+                                       form=login_form,
+                                       message='Пароль неверный!',
+                                       title='Авторизация администратора')
+    return render_template('/admin_login.html',
+                           form=login_form,
+                           title='Авторизация администратора')
 
 
 @app.route('/admin')
@@ -127,6 +145,8 @@ def admin():
     cake_form = CakeForm()
     feedback_form = FeedbackForm()
     feedback = get_feedback()
+    show_cake = True
+    show_feedback = False
     if request.args.get('entity', None) == 'cake':
         if request.args['action'] == 'delete':
             with sql.connect(user=config['database']['user'],
@@ -139,8 +159,14 @@ def admin():
 
                 if os.path.exists(f'static/img/cakes/{request.args["id"]}'):
                     shutil.rmtree(f'static/img/cakes/{request.args["id"]}')
+
+                show_cake = True
+                show_feedback = False
     elif request.args.get('entity', None) == 'feedback':
         os.remove('.' + feedback[int(request.args["id"])])
+
+        show_cake = False
+        show_feedback = True
 
     cakes, n_cake_pages = get_cakes()
     return render_template('admin.html',
@@ -149,7 +175,10 @@ def admin():
                            cake_form=cake_form,
                            feedback_form=feedback_form,
                            feedback=get_feedback(),
-                           is_admin=True)
+                           is_admin=True,
+                           show_cake=show_cake,
+                           show_feedback=show_feedback,
+                           title='Панель администратора')
 
 
 @app.route('/create_cake', methods=['GET', 'POST'])
@@ -166,16 +195,17 @@ def create_cake():
                         (form.title.data, form.description.data, form.cost.data))
             con.commit()
 
-            # TODO: fix no cakes case
             cur.execute('SELECT max(id) FROM cakes')
             cake_id = cur.fetchone()[0]
+            print(cake_id)
 
             if not os.path.exists(f'static/img/cakes/{cake_id}'):
                 os.mkdir(f'static/img/cakes/{cake_id}', mode=0o777)
-            #     todo: если нету файлов в форме (сейчас ошибка)
-            # можно взять дефолтную картинку типа тортика
-            for img in form.images.data:
-                img.save(f'./static/img/cakes/{cake_id}/{secure_filename(img.filename)}')
+            if not form.images.data[0].filename:
+                shutil.copy('./static/img/cake-default.jpg', f'./static/img/cakes/{cake_id}/cake.jpg')
+            else:
+                for img in form.images.data:
+                    img.save(f'./static/img/cakes/{cake_id}/{secure_filename(img.filename)}')
 
     return redirect('/admin')
 
@@ -214,10 +244,10 @@ def create_feedback():
 
     return redirect('/admin')
 
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-if __name__ == '__main__':
-    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='img/favicon.ico'))
-    app.run(debug=True)
+
+app.run(debug=True)
