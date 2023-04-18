@@ -24,3 +24,7 @@ class FeedbackForm(FlaskForm):
     image = FileField('Картинка')
     submit = SubmitField('Добавить')
 
+class ExampleForm(FlaskForm):
+    images = MultipleFileField('Картинки')
+    submit = SubmitField('Добавить')
+

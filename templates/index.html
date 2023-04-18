@@ -2,7 +2,8 @@
 
 {% block content %}
 
-    {% import 'cake.html' as macros %}
+    {% import 'cake.html' as cake_macros %}
+    {% import 'card_element.html' as card_macros %}
 
     <div class="container-fluid">
         <div class="row">
@@ -37,19 +38,40 @@
             <div class="row m-5">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
-                        <h3>Торты</h3>
+                        <h3>Начинки</h3>
                     </div>
                 </div>
 
                 <div class="row d-flex justify-content-around gy-3">
                     {% for cake in cakes[:4] %}
-                        {{ macros.render_cake(cake, False) }}
+                        {{ cake_macros.render_cake(cake, False) }}
                     {% endfor %}
                 </div>
 
                 <div class="row my-3">
                     <div class="col d-flex justify-content-center">
-                        <a href="/cakes/1" type="button" class="btn btn-outline-secondary">БОЛЬШЕ ТОРТОВ</a>
+                        <a href="/cakes/1" type="button" class="btn btn-outline-secondary">БОЛЬШЕ НАЧИНОК</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-5">
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <h3 style="color: #FF84C0;">Примеры&nbsp;</h3>
+                        <h3>работ</h3>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-around gy-3">
+                    {% for example in examples[:4] %}
+                        {{ card_macros.render_card(example['imgs'], example['id'], False, 'example') }}
+                    {% endfor %}
+                </div>
+
+                <div class="row my-3">
+                    <div class="col d-flex justify-content-center">
+                        <a href="/examples" type="button" class="btn btn-outline-secondary">БОЛЬШЕ ПРИМЕРОВ</a>
                     </div>
                 </div>
             </div>
@@ -63,12 +85,8 @@
                 </div>
 
                 <div class="row d-flex justify-content-around gy-3">
-                    {% for src in feedback[:4] %}
-                        <div class="col-xl-3" style="width: 300px;">
-                            <div class="card h-100">
-                                <img src="{{ src }}" class="card-img-top" width="250px" height="500px" alt="...">
-                            </div>
-                        </div>
+                    {% for elem in feedback[:4] %}
+                        {{ card_macros.render_card(elem['imgs'], loop.index0, False, 'feedback') }}
                     {% endfor %}
                 </div>
 

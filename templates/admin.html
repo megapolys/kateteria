@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% import 'cake.html' as macros %}
+{% import 'cake.html' as cake_macros %}
+{% import 'card_element.html' as card_macros %}
 
 {% block content %}
 
@@ -7,26 +8,26 @@
         <div class="accordion" id="accordionPanelsStayOpenExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button {{ 'collapsed' if not show_cake else ''}}" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="{{'true' if show_cake else 'false'}}"
+                    <button class="accordion-button {{ 'collapsed' if not active_accordion == 'cake' else ''}}" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="{{'true' if active_accordion == 'cake' else 'false'}}"
                             aria-controls="panelsStayOpen-collapseOne">
-                        <h3>Торты</h3>
+                        <h3>Начинки</h3>
                     </button>
                 </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse {{ 'show' if show_cake else ''}}">
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse {{ 'show' if active_accordion == 'cake' else ''}}">
                     <div class="accordion-body">
                         <div class="row">
                             <div class="col-10">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                         data-bs-target="#createCakeForm" onclick="createBtnClicked();">
-                                    Добавить торт
+                                    Добавить начинку
                                 </button>
                             </div>
                         </div>
 
                         <div class="row justify-content-around g-4 gy-3 mt-0">
                             {% for cake in cakes %}
-                                {{ macros.render_cake(cake, True) }}
+                                {{ cake_macros.render_cake(cake, True) }}
                             {% endfor %}
                         </div>
                     </div>
@@ -34,13 +35,39 @@
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button {{ 'collapsed' if not show_feedback else ''}}" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="{{'true' if show_feedback else 'false'}}"
+                    <button class="accordion-button {{ 'collapsed' if not active_accordion == 'examples' else ''}}" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="{{'true' if active_accordion == 'examples' else 'false'}}"
                             aria-controls="panelsStayOpen-collapseTwo">
+                        <h3>Примеры работ</h3>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse {{ 'show' if active_accordion == 'examples' else ''}}">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-10">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#addExampleForm">
+                                    Добавить вкусняшку
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-around g-4 gy-3 mt-2">
+                            {% for example in examples %}
+                                {{ card_macros.render_card(example['imgs'], example['id'], True, 'example') }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {{ 'collapsed' if not active_accordion == 'feedback' else ''}}" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="{{'true' if active_accordion == 'feedback' else 'false'}}"
+                            aria-controls="panelsStayOpen-collapseThree">
                         <h3>Отзывы о работе</h3>
                     </button>
                 </h2>
-                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse {{ 'show' if show_feedback else ''}}">
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse {{ 'show' if active_accordion == 'feedback' else ''}}">
                     <div class="accordion-body">
                         <div class="row">
                             <div class="col-10">
@@ -53,15 +80,7 @@
 
                         <div class="row justify-content-around g-4 gy-3 mt-2">
                             {% for src in feedback %}
-                                <div class="col-xl-3" style="width: 300px;">
-                                    <div class="card h-100">
-                                        <img src="{{ src }}" class="card-img-top" width="250px" height="500px"
-                                             alt="...">
-                                        <a href="#"
-                                           onClick="if (confirm('Точно???')) window.location.replace('/admin?entity=feedback&action=delete&id={{ loop.index0 }}');"
-                                           role="button" class="btn btn-danger">Удалить</a>
-                                    </div>
-                                </div>
+                                {{ card_macros.render_card(src['imgs'], loop.index0, True, 'feedback') }}
                             {% endfor %}
                         </div>
                     </div>
@@ -80,7 +99,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form method="post" class="row g-3" action="/create_cake" enctype="multipart/form-data"
+                    <form method="post" class="row g-3" action="/admin?entity=cake&action=create" enctype="multipart/form-data"
                           id="cakeForm">
                         {{ cake_form.csrf_token() }}
                         {{ cake_form.cake_id() }}
@@ -115,6 +134,36 @@
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="addExampleForm" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdrop">Добавить вкусняшку</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form method="post" class="row g-3" action="/admin?entity=example&action=create" enctype="multipart/form-data">
+                        {{ example_form.csrf_token() }}
+                        <div class="mb-3">
+                            {{ example_form.images.label(class="visually-hidden") }}
+                            {{ example_form.images(placeholder=example_form.images.label.text) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ example_form.submit(class="btn btn-primary mb-3") }}
+                        </div>
+                        {{ message }}
+                    </form>
+                </div>
+                <!--      <div class="modal-footer">-->
+                <!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+                <!--        <button type="button" class="btn btn-primary">Understood</button>-->
+                <!--      </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
     <div class="modal fade" id="addFeedbackForm" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -124,7 +173,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form method="post" class="row g-3" action="/create_feedback" enctype="multipart/form-data">
+                    <form method="post" class="row g-3" action="/admin?entity=feedback&action=create" enctype="multipart/form-data">
                         {{ feedback_form.csrf_token() }}
                         <div class="mb-3">
                             {{ feedback_form.image.label(class="visually-hidden") }}
@@ -161,7 +210,7 @@
             input.value = cake_id;
 
             var form = document.getElementById("cakeForm");
-            form.action = '/update_cake/' + cake_id;
+            form.action = '/admin?entity=cake&action=update&id=' + cake_id;
 
             var button = document.getElementById("cakeSubmit");
             button.value = 'Изменить';
@@ -188,7 +237,7 @@
             input.value = -1;
 
             var form = document.getElementById("cakeForm");
-            form.action = '/create_cake'
+            form.action = '/admin?entity=cake&action=create'
 
             var button = document.getElementById("cakeSubmit");
             button.value = 'Добавить';
@@ -200,7 +249,7 @@
             desc.value = '';
 
             var cost = document.getElementById("cakeCost");
-            cost.value = null;
+            cost.value = 0;
         }
     </script>
 
